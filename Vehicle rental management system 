@@ -1,0 +1,147 @@
+#include <stdio.h>
+#include <string.h>
+
+struct Vehicle
+{
+int id;
+char name[30];
+float rent;
+int available;
+};
+
+struct Vehicle v[5] = {
+{101, "Car", 1500, 1},
+{102, "Bike", 500, 1},
+{103, "Van", 2000, 1},
+{104, "Scooter", 300, 1},
+{105, "Jeep", 2500, 1}
+};
+
+int main()
+{
+int choice, id, days, i, found;
+float total;
+
+char customer[50];
+
+do
+{
+    printf("\n===== VEHICLE RENTAL MANAGEMENT SYSTEM =====\n");
+    printf("1. Display Vehicles\n");
+    printf("2. Rent a Vehicle\n");
+    printf("3. Return a Vehicle\n");
+    printf("4. Exit\n");
+
+    printf("\nEnter your choice: ");
+    scanf("%d", &choice);
+
+    switch(choice)
+    {
+        case 1:
+            printf("\n--- AVAILABLE VEHICLES ---\n");
+
+            for(i = 0; i < 5; i++)
+            {
+                printf("\nVehicle ID: %d", v[i].id);
+                printf("\nVehicle Name: %s", v[i].name);
+                printf("\nRent Per Day: Rs. %.2f", v[i].rent);
+
+                if(v[i].available == 1)
+                    printf("\nStatus: Available\n");
+                else
+                    printf("\nStatus: Rented\n");
+            }
+            break;
+
+        case 2:
+            printf("\nEnter Customer Name: ");
+            scanf(" %49[^\n]", customer);
+
+            printf("Enter Vehicle ID: ");
+            scanf("%d", &id);
+
+            found = 0;
+
+            for(i = 0; i < 5; i++)
+            {
+                if(v[i].id == id)
+                {
+                    found = 1;
+
+                    if(v[i].available == 1)
+                    {
+                        printf("Enter Number of Days: ");
+                        scanf("%d", &days);
+
+                        if(days <= 0)
+                        {
+                            printf("Invalid number of days!\n");
+                            break;
+                        }
+
+                        total = v[i].rent * days;
+
+                        v[i].available = 0;
+
+                        printf("\n--- RENTAL SUCCESSFUL ---\n");
+                        printf("Customer Name: %s\n", customer);
+                        printf("Vehicle: %s\n", v[i].name);
+                        printf("Number of Days: %d\n", days);
+                        printf("Total Amount: Rs. %.2f\n", total);
+                    }
+                    else
+                    {
+                        printf("\nVehicle is already rented!\n");
+                    }
+                    break;
+                }
+            }
+
+            if(found == 0)
+                printf("\nVehicle ID not found!\n");
+
+            break;
+
+        case 3:
+            printf("\nEnter Vehicle ID to Return: ");
+            scanf("%d", &id);
+
+            found = 0;
+
+            for(i = 0; i < 5; i++)
+            {
+                if(v[i].id == id)
+                {
+                    found = 1;
+
+                    if(v[i].available == 0)
+                    {
+                        v[i].available = 1;
+                        printf("\nVehicle Returned Successfully!\n");
+                    }
+                    else
+                    {
+                        printf("\nThis vehicle was not rented!\n");
+                    }
+                    break;
+                }
+            }
+
+            if(found == 0)
+                printf("\nVehicle ID not found!\n");
+
+            break;
+
+        case 4:
+            printf("\nThank You for Using Vehicle Rental System!\n");
+            break;
+
+        default:
+            printf("\nInvalid Choice! Try Again.\n");
+    }
+
+} while(choice != 4);
+
+return 0;
+
+}
